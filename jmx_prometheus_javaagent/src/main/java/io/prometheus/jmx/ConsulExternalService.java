@@ -26,44 +26,40 @@ public class ConsulExternalService {
 
   public ConsulExternalService(String consulHost) {
     this.consulHost = consulHost;
-    // System.out.println("Instantiate consulHost: " + consulHost);
   }
   public void registerService(String serviceName, int servicePort, List<String> tags, boolean healthCheck) {
           try {
             String fqdnHostName = InetAddress.getLocalHost().getCanonicalHostName();
             String hostName = InetAddress.getLocalHost().getHostName();
             // create json object
-            JSONObject postJsonObj = new JSONObject();
+            JSONObject externalSvcJsonObj = new JSONObject();
             Map labelsMap = new LinkedHashMap();
             Map nodeMetaMap = new LinkedHashMap();
             Map serviceMap = new LinkedHashMap();
             Map checksMap = new LinkedHashMap();
             Map checkDefMap = new LinkedHashMap();
-            // Map 
-            // TODO get hostname/IP
-            postJsonObj.put("Node",fqdnHostName);
-            postJsonObj.put("Address",fqdnHostName);
-            // TODO make loop for any custom labels
+            externalSvcJsonObj.put("Node",fqdnHostName);
+            externalSvcJsonObj.put("Address",fqdnHostName);
             nodeMetaMap.put("external-node","true");
             nodeMetaMap.put("external-probe", "true");
-            postJsonObj.put("NodeMeta", nodeMetaMap);
+            externalSvcJsonObj.put("NodeMeta", nodeMetaMap);
             serviceMap.put("ID",hostName+"-"+servicePort);
             serviceMap.put("Service", serviceName);
             serviceMap.put("Port", servicePort);
             serviceMap.put("Tags", tags);
             serviceMap.put("Address", hostName);
-            postJsonObj.put("Service",serviceMap);
+            externalSvcJsonObj.put("Service",serviceMap);
             if (healthCheck){
               checksMap.put("Name","http-check");
               checksMap.put("status","passing");
               checkDefMap.put("http", "http://"+hostName+":"+servicePort+"/metrics");
               checkDefMap.put("interval", "30s");
               checksMap.put("Definition", checkDefMap);
-              postJsonObj.put("Check",checksMap);
+              externalSvcJsonObj.put("Check",checksMap);
             }
 
             // System.out.println("\n\n");
-            System.out.println(postJsonObj);
+            // System.out.println(externalSvcJsonObj);
             // System.out.println("\n\n");
             
             // TODO URL 
@@ -74,7 +70,7 @@ public class ConsulExternalService {
             httpConnection.setRequestProperty("Content-Type", "application/json");
 
             DataOutputStream wr = new DataOutputStream(httpConnection.getOutputStream());
-            wr.write(postJsonObj.toString().getBytes());
+            wr.write(externalSvcJsonObj.toString().getBytes());
             Integer responseCode = httpConnection.getResponseCode();
             System.out.println("STDOUT response code: " + responseCode);
 

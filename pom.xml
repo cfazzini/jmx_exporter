@@ -4,11 +4,11 @@
 
   <groupId>io.prometheus.jmx</groupId>
   <artifactId>parent</artifactId>
-  <version>0.12.1-SNAPSHOT</version>
+  <version>0.12.1-SNAPSHOT-PS</version>
   <description>
-    See https://github.com/prometheus/jmx_exporter/blob/master/README.md
+    See https://github.com/cfazzini/ps-jmx_exporter/blob/master/README.md
   </description>
-  <url>http://github.com/prometheus/jmx_exporter</url>
+  <url>http://github.com/cfazzini/ps-jmx_exporter</url>
 
   <parent>
       <groupId>org.sonatype.oss</groupId>
@@ -42,9 +42,9 @@
   </licenses>
 
   <scm>
-      <connection>scm:git:git@github.com:prometheus/jmx_exporter.git</connection>
-      <developerConnection>scm:git:git@github.com:prometheus/jmx_exporter.git</developerConnection>
-      <url>git@github.com:prometheus/jmx_exporter.git</url>
+      <connection>scm:git:git@github.com:cfazzini/ps-jmx_exporter.git</connection>
+      <developerConnection>scm:git:git@github.com:cfazzini/ps-jmx_exporter.git</developerConnection>
+      <url>git@github.com:cfazzini/ps-jmx_exporter.git</url>
       <tag>HEAD</tag>
   </scm>
 
