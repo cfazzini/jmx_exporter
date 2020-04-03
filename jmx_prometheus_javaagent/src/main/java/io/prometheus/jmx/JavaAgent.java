@@ -92,8 +92,6 @@ public class JavaAgent {
         }
 
         if (register && peoplesoft){
-          System.err.println("Peoplesoft AND Register TRUE");
-          System.err.println(consulType);
         PeopleSoftService service = new PeopleSoftService();
         ConsulService consul = new ConsulService(consulHost, consulPort);
         if (service.isPeopleSoft()){

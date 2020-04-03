@@ -55,7 +55,7 @@ public class ConsulService {
   public void registerInternalService(String serviceName, int servicePort, List<String> tags){
 
   }
-  
+
   public void registerExternalService(String serviceName, int servicePort, List<String> tags) {
     try {
       String uuidSeed = (String)InetAddress.getLocalHost().getHostName()+"-"+serviceName+servicePort;
@@ -84,7 +84,7 @@ public class ConsulService {
       putJsontoConsul(externalSvcJsonObj);
     }
     catch (Exception e) {
-      System.err.println("External JSON Build Failed: " + e.getMessage());
+      System.err.println("External registration failed: " + e.getMessage());
     }
   }
 
