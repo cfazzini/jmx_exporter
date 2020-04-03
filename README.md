@@ -6,8 +6,11 @@ PeopleSoft JMX Exporter
 
 Changes:
 * PeopleSoft Tag Generation (for Consul)
-* Consul Service Registration
+* Consul Service Registration (Internal(WIP) and External service types)
+* Local or remote consul agent/server
 * Additional settings in Yaml Config
+* Custom Consul tags (WIP)
+* Custom Service Name/Prefix (WIP)
 * No changes to Mbean collecting/exporting code
 
 WARNING: I'm terrible at Java, so there is room for improvement. PRs/issues/comments appreciated. No gaurantees. No money-back.
