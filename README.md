@@ -2,15 +2,13 @@ PeopleSoft JMX Exporter
 =====
 
 ## Summary of Changes/Additions
-Fork of [JMX Exporter](https://github.com/prometheus/jmx_exporter)
+*This is a fork of the original [JMX Exporter](https://github.com/prometheus/jmx_exporter)*
 
-PeopleSoft Tag Generation (for Consul)
-
-Consul Service Registration
-
-Additional settings in Yaml Config
-
-No changes to Mbean collecting/exporting code
+Changes:
+* PeopleSoft Tag Generation (for Consul)
+* Consul Service Registration
+* Additional settings in Yaml Config
+* No changes to Mbean collecting/exporting code
 
 WARNING: I'm terrible at Java, so there is room for improvement. PRs/issues/comments appreciated. No gaurantees. No money-back.
 
