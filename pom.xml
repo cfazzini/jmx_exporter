@@ -4,7 +4,7 @@
 
   <groupId>io.prometheus.jmx</groupId>
   <artifactId>parent</artifactId>
-  <version>0.12.1-SNAPSHOT-PS</version>
+  <version>0.1-SNAPSHOT</version>
   <description>
     See https://github.com/cfazzini/ps-jmx_exporter/blob/master/README.md
   </description>

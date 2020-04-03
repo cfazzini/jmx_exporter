@@ -12,12 +12,13 @@ import io.prometheus.client.hotspot.DefaultExports;
 
 import java.util.Map;
 import java.util.List;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 
 import io.prometheus.jmx.NewConsulClient;
 import io.prometheus.jmx.ConsulExternalService;
+import io.prometheus.jmx.PeopleSoftService;
 
 public class JavaAgent {
     static HTTPServer server;
@@ -30,38 +31,17 @@ public class JavaAgent {
         // Bind to all interfaces by default (this includes IPv6).
         String host = "0.0.0.0";
 
-        // ALL CONSUL CRAP
-        String consulHost = "oc-prometheus1.ongov.net:8500";
-        String userDir = System.getProperty("user.dir");
-        String pattern = "(appserv|webserv)(/+|\\+)(prcs)?(/+|\\+)?(\\w+)";
-        List<String> tagList = new ArrayList<String>();
-        System.err.println("Java UserDir = " + userDir);
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(userDir);
-        boolean register = false;
-        String serviceName = "none";
 
-        if (m.find()) {
-            if (m.group(1).equals("webserv")) {
-                System.err.println("found webserver");
-                System.err.println("tag: "+m.group(5));
-                serviceName = "pswebserv-jmx-exporter";
-                tagList.add(m.group(5));
-                register = true;
-            } else if (m.group(3) == null ) {
-                System.err.println("prcs null = appserver");
-                serviceName = "psappserv-jmx-exporter";
-                tagList.add(m.group(5));
-                // tagList.add("appsrv");
-                register = true;
-            }else if (m.group(3).equals("prcs")) {
-                System.err.println("in prcs if");
-                serviceName = "psprcs-jmx-exporter";
-                tagList.add(m.group(5));
-                tagList.add("prcs");
-                register = true;
-            }
+        PeopleSoftService service = new PeopleSoftService();
+        if (service.isPeopleSoft()) {
+            System.err.println("getServiceName: " + service.getServiceName());
+            System.err.println("tagList: "+Arrays.toString(service.getTagList().toArray()));
         }
+        // ALL CONSUL CRAP
+        //REFACTOR:
+        // String consulHost = "oc-prometheus1.ongov.net:8500";
+
+        
         try {
             Config config = parseConfig(agentArgument, host);
 
@@ -69,6 +49,12 @@ public class JavaAgent {
             new JmxCollector(new File(config.file)).register();
             DefaultExports.initialize();
             server = new HTTPServer(config.socket, CollectorRegistry.defaultRegistry, true);
+
+            // if (register) {
+            //     ConsulExternalService consul = new ConsulExternalService(consulHost);
+            //     consul.registerService(serviceName, config.port, tagList, false);
+            //     System.err.println("Registering to consul");
+            // }
         }
         catch (IllegalArgumentException e) {
             System.err.println("Usage: -javaagent:/path/to/JavaAgent.jar=[host:]<port>:<yaml configuration file> " + e.getMessage());
@@ -124,11 +110,5 @@ public class JavaAgent {
             this.file = file;
             this.socket = socket;
         }
-    }
-
-    static boolean isPeopleSoft(){
-        //TODO Implement
-        return true;
-
     }
 }

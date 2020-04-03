@@ -27,6 +27,7 @@ public class ConsulExternalService {
   public ConsulExternalService(String consulHost) {
     this.consulHost = consulHost;
   }
+  
   public void registerService(String serviceName, int servicePort, List<String> tags, boolean healthCheck) {
           try {
             String fqdnHostName = InetAddress.getLocalHost().getCanonicalHostName();
