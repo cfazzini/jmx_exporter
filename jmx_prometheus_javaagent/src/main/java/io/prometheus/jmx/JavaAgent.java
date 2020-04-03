@@ -56,7 +56,8 @@ public class JavaAgent {
         String consulHost = "localhost";
         String consulPort = "8500";
         String consulType = "internal";
-        
+        String defaultServiceName = "jmx-exporter";
+        List<String> defaultTagList = new ArrayList<String>();
         boolean register = false;
         boolean peoplesoft = false;
         
@@ -90,20 +91,30 @@ public class JavaAgent {
         if (yaml.containsKey("peoplesoft") && (Boolean)yaml.get("peoplesoft")) {
           peoplesoft = (Boolean)yaml.get("peoplesoft");
         }
-
-        if (register && peoplesoft){
-        PeopleSoftService service = new PeopleSoftService();
-        ConsulService consul = new ConsulService(consulHost, consulPort);
-        if (service.isPeopleSoft()){
-          if (consulType.equals("external")) {
-            consul.registerExternalService(service.getServiceName(),config.port, service.getTagList());
+        if (register){
+          ConsulService consul = new ConsulService(consulHost, consulPort);
+          if (!peoplesoft) {
+            if (consulType.equals("external")) {
+              consul.registerExternalService(defaultServiceName,config.port, defaultTagList);
+            }
+            else {
+              consul.registerInternalService(defaultServiceName, config.port, defaultTagList);
+            }
           }
-          else {
-            consul.registerInternalService(service.getServiceName(), config.port, service.getTagList());
+          if (peoplesoft){
+            PeopleSoftService service = new PeopleSoftService();
+            if (service.isPeopleSoft()){
+              if (consulType.equals("external")) {
+                consul.registerExternalService(service.getServiceName(),config.port, service.getTagList());
+              }
+              else {
+                consul.registerInternalService(service.getServiceName(), config.port, service.getTagList());
+              }
+            } else {
+              System.err.println("Peoplesoft mode specified, but could not parse directory.");
+            }
           }
-          
         }
-      }
     } catch (Exception e) {
       System.err.println("Error registering to consul" + e);
     }
