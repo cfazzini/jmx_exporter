@@ -36,6 +36,11 @@ The configuration is in YAML. An example with all possible options:
 ---
 startDelaySeconds: 0
 hostPort: 127.0.0.1:1234
+consul: true
+consulHost: consul.server.org
+consulType: external
+consulPort: 8500
+peoplesoft: true
 username: 
 password: 
 jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:1234/jmxrmi
@@ -56,6 +61,11 @@ rules:
 ```
 Name     | Description
 ---------|------------
+consul    | Enable consul registration, defaults to `false`
+consulHost | Consul server hostname, defaults to `localhost`
+consulType | Consul service type, MUST BE: internal or external defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
+consulPort | Consul server Port, defaults to `8500`
+peoplesoft | Enable peoplesoft service tag parsing, defaults `false`
 startDelaySeconds | start delay before serving requests. Any requests within the delay period will result in an empty metrics set.
 hostPort | The host and port to connect to via remote JMX. If neither this nor jmxUrl is specified, will talk to the local JVM.
 username | The username to be used in remote JMX password authentication.
