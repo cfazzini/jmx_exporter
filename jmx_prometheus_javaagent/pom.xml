@@ -18,7 +18,7 @@
     <dependency>
       <groupId>io.prometheus.jmx</groupId>
       <artifactId>collector</artifactId>
-      <version>0.12.1-SNAPSHOT-PS</version>
+      <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.prometheus</groupId>
@@ -46,8 +46,18 @@
       <artifactId>consul-api</artifactId>
       <version>1.4.4</version>
     </dependency>
+  <!-- </dependencies>
+    <dependency>
+        <groupId>com.orbitz.consul</groupId>
+        <artifactId>consul-client</artifactId>
+        <version>1.4.2</version>
+    </dependency> -->
+    <!-- <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>27.1-jre</version>
+    </dependency> -->
   </dependencies>
-
 
   <build>
     <plugins>

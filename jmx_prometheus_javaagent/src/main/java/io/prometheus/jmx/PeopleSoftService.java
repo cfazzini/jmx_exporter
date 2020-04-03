@@ -13,7 +13,7 @@ public class PeopleSoftService {
   final static Pattern r = Pattern.compile(pattern);
   final static String userDir = System.getProperty("user.dir");
 
-  private boolean isPeopleSoft = false;
+  // private boolean isPeopleSoft = false;
   private String serviceName = "";
   private List<String> tagList = new ArrayList<String>();
 
@@ -74,6 +74,9 @@ public class PeopleSoftService {
     else {
       return false;
     }
+  }
 
+  public void registerConsul (String consulHost, String serviceName, int servicePort, List<String> tags){
+    // TODO 
   }
 } 
