@@ -37,9 +37,6 @@ public class JavaAgent {
             System.err.println("getServiceName: " + service.getServiceName());
             System.err.println("tagList: "+Arrays.toString(service.getTagList().toArray()));
         }
-        // ALL CONSUL CRAP
-        //REFACTOR:
-        // String consulHost = "oc-prometheus1.ongov.net:8500";
 
         
         try {
