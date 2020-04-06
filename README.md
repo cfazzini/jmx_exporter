@@ -1,8 +1,24 @@
-JMX Exporter
+PeopleSoft JMX Exporter
 =====
 
-JMX to Prometheus exporter: a collector that can configurably scrape and
-expose mBeans of a JMX target.
+## Summary of Changes/Additions
+*This is a fork of the original [JMX Exporter](https://github.com/prometheus/jmx_exporter)*
+
+Changes/Features:
+* PeopleSoft Tag Generation (for Consul)
+* Consul Service Registration (Internal and External service types)
+* Local or remote consul agent/server
+* Additional settings in Yaml Config
+* Custom Consul Tags
+* Custom Service Name/Prefix/Suffix (WIP)
+* No changes to Mbean collecting/exporting code
+
+WARNING: I'm terrible at Java, so there is room for improvement. PRs/issues/comments appreciated. No gaurantees. No money-back.
+
+## JMX Exporter
+PeopleSoft JMX to Prometheus exporter: a collector that can configurably scrape and
+expose mBeans of a JMX target, modified for use with PeopleSoft systems.
+
 
 This exporter is intended to be run as a Java Agent, exposing a HTTP server
 and serving metrics of the local JVM. It can be also run as an independent
@@ -11,20 +27,32 @@ disadvantages, such as being harder to configure and being unable to expose
 process metrics (e.g., memory and CPU usage). Running the exporter as a Java
 Agent is thus strongly encouraged.
 
+
 ## Running
 
-To run as a javaagent [download the jar](https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.12.0/jmx_prometheus_javaagent-0.12.0.jar) and run:
+To run as a javaagent [download the jar]() and run:
 
 ```
 java -javaagent:./jmx_prometheus_javaagent-0.12.0.jar=8080:config.yaml -jar yourJar.jar
 ```
-Metrics will now be accessible at http://localhost:8080/metrics
+Metrics will now be accessible at http://host:8080/metrics
 
 To bind the java agent to a specific IP change the port number to `host:port`.
 
 See `./run_sample_httpserver.sh` for a sample script that runs the httpserver against itself.
 
 Please note that due to the nature of JMX the `/metrics` endpoint might exceed Prometheus default scrape timeout of 10 seconds.
+
+## Consul and PeopleSoft
+PeopleSoft mode enables the parsing of the folder structure the agent is running from to generate Consul tags. If folder structures match following, service name and tags generated:
+ServerType    | Path | ServiceName | Tags Generated
+-------- | ------- | ----- | ----
+App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | \<domain>, appserv
+Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | \<domain>, prcs
+Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows:D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | \<domain>, webserv
+
+
+Sample YAML configuration files are currently available [here](https://github.com/psadmin-io/ps-prometheus) (WIP)
 
 ## Building
 
@@ -36,6 +64,15 @@ The configuration is in YAML. An example with all possible options:
 ---
 startDelaySeconds: 0
 hostPort: 127.0.0.1:1234
+peoplesoft: true
+consulRegister: true
+consulHost: consul.server.org
+consulType: external
+consulPort: 8500
+consulTags: ["Tag1","Tag2"]
+consulServiceName: "custom-service-name"
+consulPrefex: "prefix"
+consulSuffix: "suffix"
 username: 
 password: 
 jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:1234/jmxrmi
@@ -56,6 +93,15 @@ rules:
 ```
 Name     | Description
 ---------|------------
+peoplesoft | NewFeature: Enable PeopleSoft service tag parsing. Defaults `false`
+consulRegister | NewFeature: Required for Consul function. Enable Consul registration. Defaults to `false`
+consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
+consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
+consulPort | NewFeature: Optional - Consul server Port. Defaults to `8500`
+consulTags | NewFeature: Optional - List of additional tags to send to Consul
+consulServiceName | NewFeature: Optional - Service name used in Consul. Defaults to `jmx-exporter` or PeopleSoft parsed value. (WIP)
+consulSuffix | NewFeature: Optional - Suffix to add to Consul service name. (WIP)
+consulPrefix | NewFeature: Optional - Prefix to add to Consul service name. (WIP)
 startDelaySeconds | start delay before serving requests. Any requests within the delay period will result in an empty metrics set.
 hostPort | The host and port to connect to via remote JMX. If neither this nor jmxUrl is specified, will talk to the local JVM.
 username | The username to be used in remote JMX password authentication.

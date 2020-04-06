@@ -4,21 +4,21 @@
   <parent>
     <groupId>io.prometheus.jmx</groupId>
     <artifactId>parent</artifactId>
-    <version>0.12.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
   </parent>
 
   <groupId>io.prometheus.jmx</groupId>
   <artifactId>jmx_prometheus_javaagent</artifactId>
   <description>
-    See https://github.com/prometheus/jmx_exporter/blob/master/README.md
+    See https://github.com/cfazzini/ps-jmx_exporter/blob/master/README.md
   </description>
-  <url>http://github.com/prometheus/jmx_exporter</url>
+  <url>http://github.com/cfazzini/ps-jmx_exporter</url>
 
   <dependencies>
     <dependency>
       <groupId>io.prometheus.jmx</groupId>
       <artifactId>collector</artifactId>
-      <version>0.12.1-SNAPSHOT</version>
+      <version>0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>io.prometheus</groupId>
@@ -36,8 +36,12 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20190722</version>
+    </dependency>
   </dependencies>
-
 
   <build>
     <plugins>
