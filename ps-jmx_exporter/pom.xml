@@ -8,7 +8,7 @@
   </parent>
 
   <groupId>io.prometheus.jmx</groupId>
-  <artifactId>jmx_prometheus_javaagent</artifactId>
+  <artifactId>ps-jmx_exporter</artifactId>
   <description>
     See https://github.com/cfazzini/ps-jmx_exporter/blob/master/README.md
   </description>

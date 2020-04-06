@@ -19,7 +19,7 @@
   <modules>
     <module>collector</module>
     <module>jmx_prometheus_httpserver</module>
-    <module>jmx_prometheus_javaagent</module>
+    <module>ps-jmx_exporter</module>
   </modules>
 
   <distributionManagement>
