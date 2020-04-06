@@ -33,7 +33,7 @@ public class ConsulService {
     this.consulPort = consulPort;
   }
 
-  private void putJsontoConsul (JSONObject json){
+  private void putJsontoExternalConsul (JSONObject json){
     try{
       URL url = new URL("http://" + consulHost + ":" + consulPort + "/v1/catalog/register");
       HttpURLConnection httpConnection  = (HttpURLConnection) url.openConnection();
@@ -52,8 +52,52 @@ public class ConsulService {
 
   }
 
-  public void registerInternalService(String serviceName, int servicePort, List<String> tags){
+  private void putJsontoInternalConsul (JSONObject json){
+    try{
+      URL url = new URL("http://" + consulHost + ":" + consulPort + "/v1/agent/service/register");
+      HttpURLConnection httpConnection  = (HttpURLConnection) url.openConnection();
+      httpConnection.setDoOutput(true);
+      httpConnection.setRequestMethod("PUT");
+      httpConnection.setRequestProperty("Content-Type", "application/json");
 
+      DataOutputStream wr = new DataOutputStream(httpConnection.getOutputStream());
+      wr.write(json.toString().getBytes());
+      Integer responseCode = httpConnection.getResponseCode();
+      System.err.println("Consul response code: " + responseCode);
+    }
+    catch (Exception e) {
+      System.err.println("Consul registration failed!" + e.getMessage());
+    }
+
+  }
+
+  public void registerInternalService(String serviceName, int servicePort, List<String> tags){
+    try {
+      String uuidSeed = (String)InetAddress.getLocalHost().getHostName()+"-"+serviceName+servicePort;
+      final String serviceId = serviceName + "-" + UUID.nameUUIDFromBytes(uuidSeed.getBytes()).toString();
+      String fqdnHostName = InetAddress.getLocalHost().getCanonicalHostName();
+      String hostName = InetAddress.getLocalHost().getHostName();
+      JSONObject internalSvcJsonObj = new JSONObject();
+      Map labelsMap = new LinkedHashMap();
+      Map checksMap = new LinkedHashMap();
+      Map checkDefMap = new LinkedHashMap();
+      internalSvcJsonObj.put("id",serviceId);
+      internalSvcJsonObj.put("name",serviceName);
+      internalSvcJsonObj.put("port",servicePort);
+      internalSvcJsonObj.put("tags", tags);
+      // if (healthCheck){
+      //   checksMap.put("name","http-check");
+      //   checksMap.put("status","passing");
+      //   checkDefMap.put("http", "http://"+hostName+":"+servicePort+"/metrics");
+      //   checkDefMap.put("interval", "30s");
+      //   checksMap.put("Definition", checkDefMap);
+      //   internalSvcJsonObj.put("check",checksMap);
+      // }
+
+      // internalSvcJsonObj.put()
+
+      putJsontoInternalConsul(internalSvcJsonObj);
+    }
   }
 
   public void registerExternalService(String serviceName, int servicePort, List<String> tags) {
@@ -67,8 +111,8 @@ public class ConsulService {
       Map labelsMap = new LinkedHashMap();
       Map nodeMetaMap = new LinkedHashMap();
       Map serviceMap = new LinkedHashMap();
-      // Map checksMap = new LinkedHashMap();
-      // Map checkDefMap = new LinkedHashMap();
+      Map checksMap = new LinkedHashMap();
+      Map checkDefMap = new LinkedHashMap();
       serviceMap.put("ID",serviceId);
       serviceMap.put("Service", serviceName);
       serviceMap.put("Port", servicePort);
@@ -80,8 +124,16 @@ public class ConsulService {
       externalSvcJsonObj.put("Address",fqdnHostName);
       externalSvcJsonObj.put("NodeMeta", nodeMetaMap);
       externalSvcJsonObj.put("Service",serviceMap);
+      // if (healthCheck){
+      //   checksMap.put("Name","http-check");
+      //   checksMap.put("status","passing");
+      //   checkDefMap.put("http", "http://"+hostName+":"+servicePort+"/metrics");
+      //   checkDefMap.put("interval", "30s");
+      //   checksMap.put("Definition", checkDefMap);
+      //   externalSvcJsonObj.put("Check",checksMap);
+      // }
 
-      putJsontoConsul(externalSvcJsonObj);
+      putJsontoExternalConsul(externalSvcJsonObj);
     }
     catch (Exception e) {
       System.err.println("External registration failed: " + e.getMessage());
