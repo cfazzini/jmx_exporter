@@ -4,13 +4,13 @@ PeopleSoft JMX Exporter
 ## Summary of Changes/Additions
 *This is a fork of the original [JMX Exporter](https://github.com/prometheus/jmx_exporter)*
 
-Changes:
+Changes/Features:
 * PeopleSoft Tag Generation (for Consul)
 * Consul Service Registration (Internal(WIP) and External service types)
 * Local or remote consul agent/server
 * Additional settings in Yaml Config
 * Custom Consul tags (WIP)
-* Custom Service Name/Prefix (WIP)
+* Custom Service Name/Prefix/Suffix (WIP)
 * No changes to Mbean collecting/exporting code
 
 WARNING: I'm terrible at Java, so there is room for improvement. PRs/issues/comments appreciated. No gaurantees. No money-back.
@@ -48,7 +48,7 @@ PeopleSoft mode enables the parsing of the folder structure the agent is running
 ServerType    | Path | ServiceName | Tags Generated
 -------- | ------- | ----- | ----
 App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | \<domain>, appserv
-Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | \<domain>, appserv
+Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | \<domain>, prcs
 Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows:D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | \<domain>, webserv
 
 
@@ -90,12 +90,15 @@ rules:
 ```
 Name     | Description
 ---------|------------
-consulRegister    | Added: Enable consul registration. Defaults to `false`
-consulHost | Added: Consul server hostname. Defaults to `localhost`
-consulType | Added: Consul service type, `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
-consulPort | Added: Consul server Port. Defaults to `8500`
-consulTags | Added: List of additional tags to send to Consul (NOT YET IMPLEMENTED)
-peoplesoft | Added: Enable peoplesoft service tag parsing. Defaults `false`
+peoplesoft | NewFeature: Enable PeopleSoft service tag parsing. Defaults `false`
+consulRegister | NewFeature: Required for Consul function. Enable Consul registration. Defaults to `false`
+consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
+consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
+consulPort | NewFeature: Optional - Consul server Port. Defaults to `8500`
+consulTags | NewFeature: Optional - List of additional tags to send to Consul (WIP)
+consulServiceName | NewFeature: Optional - Service name used in Consul. Defaults to `jmx-exporter` or PeopleSoft parsed value. (WIP)
+consulSuffix | NewFeature: Optional - Suffix to add to Consul service name. (WIP)
+consulPrefix | NewFeature: Optional - Prefix to add to Consul service name. (WIP)
 startDelaySeconds | start delay before serving requests. Any requests within the delay period will result in an empty metrics set.
 hostPort | The host and port to connect to via remote JMX. If neither this nor jmxUrl is specified, will talk to the local JVM.
 username | The username to be used in remote JMX password authentication.
