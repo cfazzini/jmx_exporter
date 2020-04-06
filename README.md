@@ -30,10 +30,10 @@ Agent is thus strongly encouraged.
 
 ## Running
 
-To run as a javaagent [download the jar]() and run:
+To run as a javaagent [download the jar](https://github.com/cfazzini/ps-jmx_exporter/releases/download/release-0.1/ps-jmx_exporter-javaagent-0.1-SNAPSHOT.jar) and run:
 
 ```
-java -javaagent:./jmx_prometheus_javaagent-0.12.0.jar=8080:config.yaml -jar yourJar.jar
+java -javaagent:./ps-jmx_exporter-javaagent-0.1-SNAPSHOT.jar=8080:config.yaml -jar yourJar.jar
 ```
 Metrics will now be accessible at http://host:8080/metrics
 
