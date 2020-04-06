@@ -64,12 +64,15 @@ The configuration is in YAML. An example with all possible options:
 ---
 startDelaySeconds: 0
 hostPort: 127.0.0.1:1234
+peoplesoft: true
 consulRegister: true
 consulHost: consul.server.org
 consulType: external
 consulPort: 8500
-consulTags: ["Tag1","Tag2"] (NOT IMPLEMENTED YET)
-peoplesoft: true
+consulTags: ["Tag1","Tag2"]
+consulServiceName: "custom-service-name"
+consulPrefex: "prefix"
+consulSuffix: "suffix"
 username: 
 password: 
 jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:1234/jmxrmi
