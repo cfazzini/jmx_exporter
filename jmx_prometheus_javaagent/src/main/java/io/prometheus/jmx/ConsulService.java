@@ -98,6 +98,9 @@ public class ConsulService {
 
       putJsontoInternalConsul(internalSvcJsonObj);
     }
+    catch (Exception e) {
+      System.err.println("Consul registration failed!" + e.getMessage());
+    }
   }
 
   public void registerExternalService(String serviceName, int servicePort, List<String> tags) {

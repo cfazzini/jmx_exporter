@@ -1,8 +1,6 @@
 package io.prometheus.jmx;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.InputStream;
 import java.lang.instrument.Instrumentation;
 import java.net.InetSocketAddress;
 import java.util.regex.Matcher;
@@ -12,17 +10,9 @@ import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.exporter.HTTPServer;
 import io.prometheus.client.hotspot.DefaultExports;
 
-import java.util.Map;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-
 import io.prometheus.jmx.ConsulService;
 import io.prometheus.jmx.PeopleSoftService;
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
-
-import org.yaml.snakeyaml.Yaml;
+import io.prometheus.jmx.ParseCustomConfig;
 
 public class JavaAgent {
   static HTTPServer server;
@@ -45,80 +35,14 @@ public class JavaAgent {
       DefaultExports.initialize();
       server = new HTTPServer(config.socket, CollectorRegistry.defaultRegistry, true);
       
+      // all new code happens here: 
+      new ParseCustomConfig(config.file, config.host, config.port).initialize();
+
       }
       catch (IllegalArgumentException e) {
         System.err.println("Usage: -javaagent:/path/to/JavaAgent.jar=[host:]<port>:<yaml configuration file> " + e.getMessage());
         System.exit(1);
       }
-
-
-      try {
-        String consulHost = "localhost";
-        String consulPort = "8500";
-        String consulType = "internal";
-        String defaultServiceName = "jmx-exporter";
-        List<String> defaultTagList = new ArrayList<String>();
-        boolean register = false;
-        boolean peoplesoft = false;
-        
-        Config config = parseConfig(agentArgument, host);
-        // Map<String, Object> yaml = parseYaml(config.file);
-        FileReader fr = new FileReader(config.file);
-        Map<String, Object> yaml = (Map<String, Object>)new Yaml().load(fr);
-        
-        if (yaml.containsKey("consulRegister") && (Boolean)yaml.get("consulRegister")) {
-          //defaults false
-          register = (Boolean)yaml.get("consulRegister");
-          if (yaml.containsKey("consulHost")) {
-            //defaults to localhost
-            consulHost = (String)yaml.get("consulHost");
-          }
-          if (yaml.containsKey("consulPort")) {
-            //defaults to 8500
-            consulPort = (String)yaml.get("consulPort");
-          }
-          if (yaml.containsKey("consulType")) {
-            consulType = (String)yaml.get("consulType");
-            if (!consulType.equals("external") && !consulType.equals("internal")){
-              System.err.println("consulType MUST be internal or external, defaulting to internal");
-              consulType = "internal";
-            }
-            else {
-              consulType = "external";
-            }
-          }
-        }
-        if (yaml.containsKey("peoplesoft") && (Boolean)yaml.get("peoplesoft")) {
-          peoplesoft = (Boolean)yaml.get("peoplesoft");
-        }
-        if (register){
-          ConsulService consul = new ConsulService(consulHost, consulPort);
-          if (!peoplesoft) {
-            if (consulType.equals("external")) {
-              consul.registerExternalService(defaultServiceName,config.port, defaultTagList);
-            }
-            else {
-              consul.registerInternalService(defaultServiceName, config.port, defaultTagList);
-            }
-          }
-          if (peoplesoft){
-            PeopleSoftService service = new PeopleSoftService();
-            if (service.isPeopleSoft()){
-              if (consulType.equals("external")) {
-                consul.registerExternalService(service.getServiceName(),config.port, service.getTagList());
-              }
-              else {
-                consul.registerInternalService(service.getServiceName(), config.port, service.getTagList());
-              }
-            } else {
-              System.err.println("Peoplesoft mode specified, but could not parse directory.");
-            }
-          }
-        }
-    } catch (Exception e) {
-      System.err.println("Error registering to consul" + e);
-    }
-    
   }
 
   // public static YamlConfig parseYaml(String file) {
