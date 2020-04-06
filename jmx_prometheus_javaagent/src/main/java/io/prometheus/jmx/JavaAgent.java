@@ -25,8 +25,6 @@ public class JavaAgent {
     // Bind to all interfaces by default (this includes IPv6).
     String host = "0.0.0.0";       
     
-    // Map<String, Object> yamlConfig = new HashMap<String, Object>();
-    
     try {
       Config config = parseConfig(agentArgument, host);
       
@@ -34,15 +32,19 @@ public class JavaAgent {
       new JmxCollector(new File(config.file)).register();
       DefaultExports.initialize();
       server = new HTTPServer(config.socket, CollectorRegistry.defaultRegistry, true);
-      
-      // all new code happens here: 
-      new ParseCustomConfig(config.file, config.host, config.port).initialize();
 
+      // all new code happens here:
+      try {
+        // Config config = parseConfig(agentArgument, host);
+        new ParseCustomConfig(config.file, config.host, config.port).initialize();
+      } catch (Exception e){
+        System.err.println("Error parsing custom config:   " + e);
       }
-      catch (IllegalArgumentException e) {
-        System.err.println("Usage: -javaagent:/path/to/JavaAgent.jar=[host:]<port>:<yaml configuration file> " + e.getMessage());
-        System.exit(1);
-      }
+
+    } catch (IllegalArgumentException e) {
+      System.err.println("Usage: -javaagent:/path/to/JavaAgent.jar=[host:]<port>:<yaml configuration file> " + e.getMessage());
+      System.exit(1);
+    }
   }
 
   // public static YamlConfig parseYaml(String file) {

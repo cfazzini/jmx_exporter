@@ -6,10 +6,10 @@ PeopleSoft JMX Exporter
 
 Changes/Features:
 * PeopleSoft Tag Generation (for Consul)
-* Consul Service Registration (Internal(WIP) and External service types)
+* Consul Service Registration (Internal and External service types)
 * Local or remote consul agent/server
 * Additional settings in Yaml Config
-* Custom Consul tags (WIP)
+* Custom Consul Tags
 * Custom Service Name/Prefix/Suffix (WIP)
 * No changes to Mbean collecting/exporting code
 
@@ -98,7 +98,7 @@ consulRegister | NewFeature: Required for Consul function. Enable Consul registr
 consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
 consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
 consulPort | NewFeature: Optional - Consul server Port. Defaults to `8500`
-consulTags | NewFeature: Optional - List of additional tags to send to Consul (WIP)
+consulTags | NewFeature: Optional - List of additional tags to send to Consul
 consulServiceName | NewFeature: Optional - Service name used in Consul. Defaults to `jmx-exporter` or PeopleSoft parsed value. (WIP)
 consulSuffix | NewFeature: Optional - Suffix to add to Consul service name. (WIP)
 consulPrefix | NewFeature: Optional - Prefix to add to Consul service name. (WIP)

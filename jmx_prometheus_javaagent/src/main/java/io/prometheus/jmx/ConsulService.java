@@ -44,10 +44,10 @@ public class ConsulService {
       DataOutputStream wr = new DataOutputStream(httpConnection.getOutputStream());
       wr.write(json.toString().getBytes());
       Integer responseCode = httpConnection.getResponseCode();
-      System.err.println("Consul response code: " + responseCode);
+      System.err.println("Registering External Service. Consul response code: " + responseCode);
     }
     catch (Exception e) {
-      System.err.println("Consul registration failed!" + e.getMessage());
+      System.err.println("Registering External Service. Consul registration failed!" + e.getMessage());
     }
 
   }
@@ -63,10 +63,10 @@ public class ConsulService {
       DataOutputStream wr = new DataOutputStream(httpConnection.getOutputStream());
       wr.write(json.toString().getBytes());
       Integer responseCode = httpConnection.getResponseCode();
-      System.err.println("Consul response code: " + responseCode);
+      System.err.println("Registering Internal Service. Consul response code: " + responseCode);
     }
     catch (Exception e) {
-      System.err.println("Consul registration failed!" + e.getMessage());
+      System.err.println("Registering Internal Service. Consul registration failed!" + e.getMessage());
     }
 
   }

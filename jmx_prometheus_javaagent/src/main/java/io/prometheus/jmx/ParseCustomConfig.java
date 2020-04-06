@@ -22,7 +22,7 @@ public class ParseCustomConfig {
       this.host = configHost;
       this.port = configPort;
     } catch (Exception e) {
-      System.err.println("Error reading config file;" + e);
+      System.err.println("Error reading config file." + e);
     }
   }
 
@@ -32,31 +32,35 @@ public class ParseCustomConfig {
       String consulPort = "8500";
       String consulType = "internal";
       String defaultServiceName = "jmx-exporter";
-      List<String> defaultTagList = new ArrayList<String>();
+      List<String> tagList = new ArrayList<String>();
+      // List<String> tagList = new ArrayList<String>();
       boolean register = false;
       boolean peoplesoft = false;
       
       if (yaml.containsKey("consulRegister") && (Boolean)yaml.get("consulRegister")) {
         //defaults false
         register = (Boolean)yaml.get("consulRegister");
-        if (yaml.containsKey("consulHost")) {
+      }
+      if (yaml.containsKey("consulHost")) {
           //defaults to localhost
           consulHost = (String)yaml.get("consulHost");
+      }
+      if (yaml.containsKey("consulPort")) {
+        //defaults to 8500
+        consulPort = (String)yaml.get("consulPort");
+      }
+      if (yaml.containsKey("consulType")) {
+        consulType = (String)yaml.get("consulType");
+        if (!consulType.equals("external") && !consulType.equals("internal")){
+          System.err.println("consulType MUST be internal or external, defaulting to internal");
+          consulType = "internal";
         }
-        if (yaml.containsKey("consulPort")) {
-          //defaults to 8500
-          consulPort = (String)yaml.get("consulPort");
+        else {
+          consulType = "external";
         }
-        if (yaml.containsKey("consulType")) {
-          consulType = (String)yaml.get("consulType");
-          if (!consulType.equals("external") && !consulType.equals("internal")){
-            System.err.println("consulType MUST be internal or external, defaulting to internal");
-            consulType = "internal";
-          }
-          else {
-            consulType = "external";
-          }
-        }
+      }
+      if (yaml.containsKey("consulTags")){
+        tagList = (List<String>) yaml.get("consulTags");
       }
       if (yaml.containsKey("peoplesoft") && (Boolean)yaml.get("peoplesoft")) {
         peoplesoft = (Boolean)yaml.get("peoplesoft");
@@ -65,20 +69,21 @@ public class ParseCustomConfig {
         ConsulService consul = new ConsulService(consulHost, consulPort);
         if (!peoplesoft) {
           if (consulType.equals("external")) {
-            consul.registerExternalService(defaultServiceName,port, defaultTagList);
+            consul.registerExternalService(defaultServiceName,port, tagList);
           }
           else {
-            consul.registerInternalService(defaultServiceName, port, defaultTagList);
+            consul.registerInternalService(defaultServiceName, port, tagList);
           }
         }
         if (peoplesoft){
           PeopleSoftService service = new PeopleSoftService();
           if (service.isPeopleSoft()){
+            tagList.addAll(service.getTagList());
             if (consulType.equals("external")) {
-              consul.registerExternalService(service.getServiceName(), port, service.getTagList());
+              consul.registerExternalService(service.getServiceName(), port, tagList);
             }
             else {
-              consul.registerInternalService(service.getServiceName(), port, service.getTagList());
+              consul.registerInternalService(service.getServiceName(), port, tagList);
             }
           } else {
             System.err.println("Peoplesoft mode specified, but could not parse directory.");
