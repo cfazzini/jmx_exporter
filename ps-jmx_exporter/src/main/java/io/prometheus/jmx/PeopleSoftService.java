@@ -48,16 +48,16 @@ public class PeopleSoftService {
     if (match.matches()){
       if (match.group(1).equals("webserv")) {
         this.serviceName = "pswebserv-jmx-exporter";
-        this.tagList.add(match.group(5));
-        this.tagList.add("webserv");
+        this.tagList.add("domain="+match.group(5));
+        this.tagList.add("domain_type=webserv");
       } else if (match.group(3) == null ) {
         this.serviceName = "psappserv-jmx-exporter";
-        this.tagList.add(match.group(5));
-        this.tagList.add("appsrv");
+        this.tagList.add("domain="+match.group(5));
+        this.tagList.add("domain_type=appsrv");
       }else if (match.group(3).equals("prcs")) {
         this.serviceName = "psprcs-jmx-exporter";
-        this.tagList.add(match.group(5));
-        this.tagList.add("prcs");
+        this.tagList.add("domain="+match.group(5));
+        this.tagList.add("domain_type=prcs");
       }
       return true;
     }

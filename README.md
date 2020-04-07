@@ -47,9 +47,9 @@ Please note that due to the nature of JMX the `/metrics` endpoint might exceed P
 PeopleSoft mode enables the parsing of the folder structure the agent is running from to generate Consul tags. If folder structures match following, service name and tags generated:
 ServerType    | Path | ServiceName | Tags Generated
 -------- | ------- | ----- | ----
-App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | \<domain>, appserv
-Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | \<domain>, prcs
-Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows:D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | \<domain>, webserv
+App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | \domain=<domain>, domain_type=appserv
+Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | \domain=<domain>, domain_type=prcs
+Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows:D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | \domain=<domain>, domain_type=webserv
 
 
 Sample YAML configuration files are currently available [here](https://github.com/psadmin-io/ps-prometheus) (WIP)
