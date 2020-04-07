@@ -46,6 +46,7 @@ public class PeopleSoftService {
     // D:\\any\\path\\to\\config\\webserv\\<domain>
     Matcher match = r.matcher(matchUserDir);
     if (match.matches()){
+      this.tagList.add("service=peoplesoft");
       if (match.group(1).equals("webserv")) {
         this.serviceName = "pswebserv-jmx-exporter";
         this.tagList.add("domain="+match.group(5));
