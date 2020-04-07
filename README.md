@@ -47,9 +47,9 @@ Please note that due to the nature of JMX the `/metrics` endpoint might exceed P
 PeopleSoft mode enables the parsing of the folder structure the agent is running from to generate Consul tags. If folder structures match following, service name and tags generated:
 ServerType    | Path | ServiceName | Tags Generated
 -------- | ------- | ----- | ----
-App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | domain=\<domain>, domain_type=appserv
-Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows: D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | domain=\<domain>, domain_type=prcs
-Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows: D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | domain=\<domain>, domain_type=webserv
+App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | service=peoplesoft <br> domain=\<domain> <br> domain_type=appserv
+Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows: D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | service=peoplesoft <br> domain=\<domain> <br> domain_type=prcs
+Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows: D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | service=peoplesoft <br> domain=\<domain> <br> domain_type=webserv
 
 
 Sample YAML configuration files are currently available [here](https://github.com/psadmin-io/ps-prometheus) (WIP)
@@ -65,11 +65,12 @@ The configuration is in YAML. An example with all possible options:
 startDelaySeconds: 0
 hostPort: 127.0.0.1:1234
 peoplesoft: true
+peoplesofRegion: "HRDEV"
 consulRegister: true
 consulHost: consul.server.org
 consulType: external
 consulPort: 8500
-consulTags: ["name1=value2","name2=value2"]
+consulTags: ["name1=name2","name2=value2"]
 consulServiceName: "custom-service-name"
 consulPrefex: "prefix"
 consulSuffix: "suffix"
@@ -94,6 +95,7 @@ rules:
 Name     | Description
 ---------|------------
 peoplesoft | NewFeature: Enable PeopleSoft service tag parsing. Defaults `false`
+peoplesoftRegion | NewFeature: Creates consul tag psregion=value. Defaults to `psregion=<domain>`. Recommend setting to group multiple systems to a single environment.
 consulRegister | NewFeature: Required for Consul function. Enable Consul registration. Defaults to `false`
 consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
 consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)

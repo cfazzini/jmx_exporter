@@ -10,12 +10,11 @@ import java.util.LinkedHashMap;
 import java.io.File;
 
 public class ParseCustomConfig {
-  Map<String, Object> yaml;// = (Map<String, Object>)new Yaml();
+  Map<String, Object> yaml;
   String host;
   int port;
 
   public ParseCustomConfig (String configFile, String configHost, int configPort){
-         //= (Map<String, Object>)new Yaml().load(fr);
     try {
       FileReader fileRead = new FileReader(configFile);
       this.yaml = (Map<String, Object>)new Yaml().load(fileRead);
@@ -33,10 +32,10 @@ public class ParseCustomConfig {
       String consulType = "internal";
       String defaultServiceName = "jmx-exporter";
       List<String> tagList = new ArrayList<String>();
-      // List<String> tagList = new ArrayList<String>();
       boolean register = false;
-      boolean peoplesoft = false;
-      
+      boolean peoplesoftKey = false;
+      boolean peoplesoftRegionKey = false;
+
       if (yaml.containsKey("consulRegister") && (Boolean)yaml.get("consulRegister")) {
         //defaults false
         register = (Boolean)yaml.get("consulRegister");
@@ -63,11 +62,14 @@ public class ParseCustomConfig {
         tagList = (List<String>) yaml.get("consulTags");
       }
       if (yaml.containsKey("peoplesoft") && (Boolean)yaml.get("peoplesoft")) {
-        peoplesoft = (Boolean)yaml.get("peoplesoft");
+        peoplesoftKey = (Boolean)yaml.get("peoplesoft");
+      }
+      if (yaml.containsKey("peoplesoftRegion")){
+        peoplesoftRegionKey = true;
       }
       if (register){
         ConsulService consul = new ConsulService(consulHost, consulPort);
-        if (!peoplesoft) {
+        if (!peoplesoftKey) {
           if (consulType.equals("external")) {
             consul.registerExternalService(defaultServiceName,port, tagList);
           }
@@ -75,9 +77,15 @@ public class ParseCustomConfig {
             consul.registerInternalService(defaultServiceName, port, tagList);
           }
         }
-        if (peoplesoft){
+        if (peoplesoftKey){
           PeopleSoftService service = new PeopleSoftService();
           if (service.isPeopleSoft()){
+            if (peoplesoftRegionKey) {
+              tagList.add("psregion="+yaml.get("peoplesoftRegion"));
+            }
+            else {
+              tagList.add("psregion="+service.getPSDomain());
+            }
             tagList.addAll(service.getTagList());
             if (consulType.equals("external")) {
               consul.registerExternalService(service.getServiceName(), port, tagList);

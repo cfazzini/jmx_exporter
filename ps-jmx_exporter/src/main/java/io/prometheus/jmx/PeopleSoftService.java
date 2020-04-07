@@ -2,10 +2,10 @@ package io.prometheus.jmx;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Map;
+// import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+// import java.util.LinkedHashMap;
 
 public class PeopleSoftService {
 
@@ -15,6 +15,7 @@ public class PeopleSoftService {
 
   // private boolean isPeopleSoft = false;
   private String serviceName = "";
+  private String psdomain;
   private List<String> tagList = new ArrayList<String>();
 
 
@@ -29,6 +30,10 @@ public class PeopleSoftService {
 
   public String getServiceName(){
     return this.serviceName;
+  }
+
+  public String getPSDomain(){
+    return this.psdomain;
   }
 
   public List<String> getTagList(){
@@ -46,19 +51,19 @@ public class PeopleSoftService {
     // D:\\any\\path\\to\\config\\webserv\\<domain>
     Matcher match = r.matcher(matchUserDir);
     if (match.matches()){
-      this.tagList.add("service=peoplesoft");
+      this.psdomain = match.group(5);
       if (match.group(1).equals("webserv")) {
         this.serviceName = "pswebserv-jmx-exporter";
-        this.tagList.add("domain="+match.group(5));
-        this.tagList.add("domain_type=webserv");
+        this.tagList.add("psdomain="+this.psdomain);
+        this.tagList.add("psdomain_type=webserv");
       } else if (match.group(3) == null ) {
         this.serviceName = "psappserv-jmx-exporter";
-        this.tagList.add("domain="+match.group(5));
-        this.tagList.add("domain_type=appsrv");
+        this.tagList.add("psdomain="+this.psdomain);
+        this.tagList.add("psdomain_type=appsrv");
       }else if (match.group(3).equals("prcs")) {
         this.serviceName = "psprcs-jmx-exporter";
-        this.tagList.add("domain="+match.group(5));
-        this.tagList.add("domain_type=prcs");
+        this.tagList.add("psdomain="+this.psdomain);
+        this.tagList.add("psdomain_type=prcs");
       }
       return true;
     }
