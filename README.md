@@ -9,7 +9,7 @@ Changes/Features:
 * Consul Service Registration (Internal and External service types)
 * Local or remote consul agent/server
 * Additional settings in Yaml Config
-* Custom Consul Tags
+* Custom Consul Tags (added to parsed PS tags)
 * Custom Service Name/Prefix/Suffix (WIP)
 * No changes to Mbean collecting/exporting code
 
@@ -69,7 +69,7 @@ consulRegister: true
 consulHost: consul.server.org
 consulType: external
 consulPort: 8500
-consulTags: ["Tag1","Tag2"]
+consulTags: ["name1=value2","name2=value2"]
 consulServiceName: "custom-service-name"
 consulPrefex: "prefix"
 consulSuffix: "suffix"
@@ -98,7 +98,7 @@ consulRegister | NewFeature: Required for Consul function. Enable Consul registr
 consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
 consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
 consulPort | NewFeature: Optional - Consul server Port. Defaults to `8500`
-consulTags | NewFeature: Optional - List of additional tags to send to Consul
+consulTags | NewFeature: Optional - List of key=value pairs for additional tags to register to Consul. Combines with PeopleSoft parsed tags.
 consulServiceName | NewFeature: Optional - Service name used in Consul. Defaults to `jmx-exporter` or PeopleSoft parsed value. (WIP)
 consulSuffix | NewFeature: Optional - Suffix to add to Consul service name. (WIP)
 consulPrefix | NewFeature: Optional - Prefix to add to Consul service name. (WIP)
