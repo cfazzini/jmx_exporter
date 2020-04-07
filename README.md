@@ -48,8 +48,8 @@ PeopleSoft mode enables the parsing of the folder structure the agent is running
 ServerType    | Path | ServiceName | Tags Generated
 -------- | ------- | ----- | ----
 App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | domain=\<domain>, domain_type=appserv
-Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows:D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | domain=\<domain>, domain_type=prcs
-Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows:D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | domain=\<domain>, domain_type=webserv
+Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows: D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | domain=\<domain>, domain_type=prcs
+Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows: D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | domain=\<domain>, domain_type=webserv
 
 
 Sample YAML configuration files are currently available [here](https://github.com/psadmin-io/ps-prometheus) (WIP)
