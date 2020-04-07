@@ -45,11 +45,11 @@ Please note that due to the nature of JMX the `/metrics` endpoint might exceed P
 
 ## Consul and PeopleSoft
 PeopleSoft mode enables the parsing of the folder structure the agent is running from to generate Consul tags. If folder structures match following, service name and tags generated:
-ServerType    | Path | ServiceName | Default PS Tags Generated
+ServerType    | Path (Matches Bold) | ServiceName | Default PS Tags Generated
 -------- | ------- | ----- | ----
-App Server | Linux: /path/to/cfg/appserv/\<domain> <br> Windows: D:\path\to\cfg\appserv\\\<domain> | psappserv-jmx-exporter | psregion=\<domain>  <br> domain=\<domain> <br> domain_type=appserv
-Prcs Scheduler | Linux: /path/to/cfg/appserv/prcs/\<domain> <br> Windows: D:\path\to\cfg\appserv\prcs\\\<domain> | psprcs-jmx-exporter | psregion=\<domain> <br> domain=\<domain> <br> domain_type=prcs
-Webserver/PIA | Linux: /path/to/cfg/webserv/\<domain> <br> Windows: D:\path\to\cfg\webserv\\\<domain> | pswebserv-jmx-exporter | psregion=\<domain> <br> domain=\<domain> <br> domain_type=webserv
+App Server | Linux: /path/to/cfg/**appserv/\<domain>** <br> Windows: D:\path\to\cfg\\**appserv\\\<domain>** | psappserv-jmx-exporter | psregion=\<domain>  <br> domain=\<domain> <br> domain_type=appserv
+Prcs Scheduler | Linux: /path/to/cfg/**appserv/prcs/\<domain>** <br> Windows: D:\path\to\cfg\\**appserv\prcs\\\<domain>** | psprcs-jmx-exporter | psregion=\<domain> <br> domain=\<domain> <br> domain_type=prcs
+Webserver/PIA | Linux: /path/to/cfg/**webserv/\<domain>** <br> Windows: D:\path\to\cfg\\**webserv\\\<domain>** | pswebserv-jmx-exporter | psregion=\<domain> <br> domain=\<domain> <br> domain_type=webserv
 
 Note: PeopleSoft mode is not required for Consul, you can enable Consul mode alone, and pass in custom taglist if desired. This could be useful if your folder structure does not match PS standard.
 
