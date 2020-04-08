@@ -9,7 +9,11 @@ Changes/Features:
 * Consul Service Registration (Internal and External service types)
 * Local or remote consul agent/server
 * Additional settings in Yaml Config
+<<<<<<< HEAD
 * Custom Consul Tags (added to parsed PS tags)
+=======
+* Custom Consul Tags
+>>>>>>> master
 * Custom Service Name/Prefix/Suffix (WIP)
 * No changes to Mbean collecting/exporting code
 
@@ -30,10 +34,10 @@ Agent is thus strongly encouraged.
 
 ## Running
 
-To run as a javaagent [download the jar]() and run:
+To run as a javaagent [download the jar](https://github.com/cfazzini/ps-jmx_exporter/releases/download/release-0.2/ps-jmx_exporter-javaagent-0.2-SNAPSHOT.jar) and run:
 
 ```
-java -javaagent:./jmx_prometheus_javaagent-0.12.0.jar=8080:config.yaml -jar yourJar.jar
+java -javaagent:./ps-jmx_exporter-javaagent-0.1-SNAPSHOT.jar=8080:config.yaml -jar yourJar.jar
 ```
 Metrics will now be accessible at http://host:8080/metrics
 
@@ -96,7 +100,7 @@ rules:
 Name     | Description
 ---------|------------
 peoplesoft | NewFeature: Enable PeopleSoft service tag parsing. Defaults `false`
-peoplesoftRegion | NewFeature: Creates consul tag psregion=value. Defaults to `psregion=<domain>`. Recommend setting to group multiple systems to a single environment.
+peoplesoftRegion | NewFeature: Sets Consul tag `psregion=value`. Defaults to `psregion=<domain>`. Recommend setting to group multiple systems to a single environment.
 consulRegister | NewFeature: Required for Consul function. Enable Consul registration. Defaults to `false`
 consulHost | NewFeature: Optional - Consul server hostname. Defaults to `localhost`
 consulType | NewFeature: Optional - Consul service type. `internal` or `external`. Defaults to `internal` See [Consul and External Services](https://www.hashicorp.com/blog/consul-and-external-services/)
