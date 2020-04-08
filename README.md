@@ -9,11 +9,7 @@ Changes/Features:
 * Consul Service Registration (Internal and External service types)
 * Local or remote consul agent/server
 * Additional settings in Yaml Config
-<<<<<<< HEAD
 * Custom Consul Tags (added to parsed PS tags)
-=======
-* Custom Consul Tags
->>>>>>> master
 * Custom Service Name/Prefix/Suffix (WIP)
 * No changes to Mbean collecting/exporting code
 
